@@ -4,19 +4,26 @@ from datetime import timedelta
 
 class AttendanceCode(models.Model):
     code = models.CharField(max_length=6)
-    opening = models.DateTimeField("opening time")
-    closing = models.DateTimeField("closing time")
+    route_id = models.CharField(max_length=6)
+    sessions = models.JSONField(default=list)
+    opening = models.DateTimeField()
+    closing = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.code} | {self.opening} | {self.closing}"
+        return f"{self.code} | {self.opening} | {self.closing} | {self.get_session()}"
     
     def is_open(self):
         now = timezone.now()
         return self.opening <= now and now < self.closing
+    
+    def get_session(self):
+        if len(self.sessions) > 0:
+            return self.sessions[0]
+        return None
 
-class Attendance(models.Model):
+class AttendanceSession(models.Model):
     attendance_code = models.ForeignKey(AttendanceCode, on_delete=models.CASCADE)
-    date_taken = models.DateTimeField("date taken")
+    date_taken = models.DateTimeField(default=timezone.now)
     count = models.IntegerField(default=0)
 
     def __str__(self):

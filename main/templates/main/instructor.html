@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Instructor Dashboard</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+        <script src='main.js'></script> -->
+    </head>
+    <body>
+        {% if attendances %}
+            <ul>
+            {% for attendance in attendances %}
+                <li><a href="{% url 'instructor detail' attendance.route_id %}">Class {{ attendance }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No classes are available.</p>
+        {% endif %}
+    </body>
+</html>
