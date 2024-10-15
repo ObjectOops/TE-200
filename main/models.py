@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models import F
 
 class Attendance(models.Model):
     route_id = models.CharField(max_length=6)
@@ -15,3 +16,8 @@ class Attendance(models.Model):
     def is_open(self):
         now = timezone.now()
         return self.opening <= now and now < self.closing
+    
+    def add_attendee(self, attendee_name):
+        self.count = F("count") + 1
+        self.attendees.append(attendee_name)
+        self.save()

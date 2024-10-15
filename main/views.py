@@ -33,22 +33,28 @@ def instructor_detail(request, attendance_route):
     return render(request, "main/instructor_detail.html", context)
 
 def student_join(request):
-    return HttpResponse("Student join.")
+    return render(request, "main/student.html", {})
+
+def student_validate(request):
+    joinCode = request.POST.get("joinCode")
+    if joinCode is None:
+        return HttpResponse("Invalid join code.")
+    attendance = Attendance.objects.filter(code=joinCode).first()
+    if attendance is None:
+        return HttpResponse("Join code not found.")
+    if not attendance.is_open():
+        return HttpResponse("Attendance expired.")
+    attendee_name = request.POST.get("attendeeName")
+    if len(attendee_name) == 0:
+        attendee_name = "Anonymous"
+    attendance.add_attendee(attendee_name)
+    return HttpResponseRedirect(reverse("student_detail", args=(attendance.route_id,)))
 
 def student_detail(request, attendance_route):
     attendance_route_validate(attendance_route)
-    return HttpResponse(f"Student detail attendance {attendance_route}.")
-
-def student_validate(request):
-    # if request.method != "POST":
-    #     return HttpResponseNotAllowed(["POST"])
-    # attendance_code = request.body
-    # attendance = AttendanceCode.objects.filter(code=attendance_code).first()
-    # if attendance is None or not attendance.is_open():
-    #     return HttpResponse()
-    # AttendanceSession.add_attendee(attendance.session_pk)
-    # return HttpResponse(attendance.route_id)
-    return HttpResponse("Placeholder")
+    attendance = Attendance.objects.get(route_id=attendance_route)
+    context = {"attendance": attendance}
+    return render(request, "main/student_detail.html", context)
 
 def attendance_route_validate(route_id):
     get_object_or_404(Attendance, route_id=route_id)
