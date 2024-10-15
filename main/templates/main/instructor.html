@@ -9,6 +9,10 @@
         <script src='main.js'></script> -->
     </head>
     <body>
+        <form action="{% url 'instructor create' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Create New Class</button>
+        </form>
         {% if attendances %}
             <ul>
             {% for attendance in attendances %}

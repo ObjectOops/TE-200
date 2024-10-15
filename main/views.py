@@ -1,6 +1,12 @@
+import random
+import hashlib
+from datetime import timedelta
+
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseNotAllowed
+from django.http import HttpResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect
+from django.urls import reverse
 from django.template import loader
+from django.utils import timezone
 
 from .models import AttendanceCode, AttendanceSession
 
@@ -13,7 +19,17 @@ def instructor_dashboard(request):
     return render(request, "main/instructor.html", context)
 
 def instructor_create(request):
-    return HttpResponse("Instructor create.")
+    code = hex(random.randint(0x0, 0xFFFFFF))[2:]
+    route_id = hashlib.sha256(code.encode('utf-8')).hexdigest()[0:6]
+    new_class = AttendanceCode(code=code, route_id=route_id)
+    new_class.save()
+    opening = timezone.now()
+    closing = opening + timedelta(minutes=10)
+    new_session = new_class.attendancesession_set.create(opening=opening, closing=closing)
+    new_class.sessions.insert(0, new_session.pk)
+    new_class.save()
+    new_session.save()
+    return HttpResponseRedirect(reverse("instructor detail", args=(new_class.route_id,)))
 
 def instructor_detail(request, attendance_route):
     attendance_route_validate(attendance_route)

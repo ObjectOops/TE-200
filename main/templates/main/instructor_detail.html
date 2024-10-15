@@ -3,12 +3,20 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <title>Class {{ attendance }}</title>
+        <title>Attendance {{ attendance.route_id }}</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
         <script src='main.js'></script> -->
     </head>
     <body>
+        {% if sessions %}
+            <ul>
+                <li>{{ sessions|first }}</li>
+            </ul>
+        {% else %}
+            <p>No sessions are available.</p>
+        {% endif %}
+        <h1>Past Sessions</h1>
         {% if sessions %}
             <ul>
             {% for session in sessions %}
