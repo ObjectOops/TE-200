@@ -1,40 +1,35 @@
-import random
-import hashlib
+from random import randint
+from hashlib import sha256
 from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.template import loader
 from django.utils import timezone
 
-from .models import AttendanceCode, AttendanceSession
+from .models import Attendance
 
 def index(request):
     return render(request, "main/index.html", {})
 
 def instructor_dashboard(request):
-    attendances = AttendanceCode.objects.order_by("-opening")
+    attendances = Attendance.objects.order_by("-opening")
     context = {"attendances": attendances}
     return render(request, "main/instructor.html", context)
 
 def instructor_create(request):
-    code = hex(random.randint(0x0, 0xFFFFFF))[2:]
-    route_id = hashlib.sha256(code.encode('utf-8')).hexdigest()[0:6]
-    new_class = AttendanceCode(code=code, route_id=route_id)
-    new_class.save()
+    code = hex(randint(0x0, 0xFFFFFF))[2:]
+    route_id = sha256(code.encode('utf-8')).hexdigest()[0:6]
     opening = timezone.now()
     closing = opening + timedelta(minutes=10)
-    new_session = new_class.attendancesession_set.create(opening=opening, closing=closing)
-    new_class.sessions.insert(0, new_session.pk)
-    new_class.save()
-    new_session.save()
-    return HttpResponseRedirect(reverse("instructor detail", args=(new_class.route_id,)))
+    new_attendance = Attendance(route_id=route_id, opening=opening, closing=closing, code=code)
+    new_attendance.save()
+    return HttpResponseRedirect(reverse("instructor_detail", args=(new_attendance.route_id,)))
 
 def instructor_detail(request, attendance_route):
     attendance_route_validate(attendance_route)
-    sessions = AttendanceCode.objects.get(route_id=attendance_route).attendancesession_set.all()
-    context = {"sessions": sessions}
+    attendance = Attendance.objects.get(route_id=attendance_route)
+    context = {"attendance": attendance}
     return render(request, "main/instructor_detail.html", context)
 
 def student_join(request):
@@ -56,4 +51,4 @@ def student_validate(request):
     return HttpResponse("Placeholder")
 
 def attendance_route_validate(route_id):
-    get_object_or_404(AttendanceCode, route_id=route_id)
+    get_object_or_404(Attendance, route_id=route_id)

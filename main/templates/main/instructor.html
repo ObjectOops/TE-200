@@ -9,18 +9,19 @@
         <script src='main.js'></script> -->
     </head>
     <body>
-        <form action="{% url 'instructor create' %}" method="POST">
+        <form action="{% url 'instructor_create' %}" method="POST">
             {% csrf_token %}
-            <button type="submit">Create New Class</button>
+            <button type="submit">Create New Attendance</button>
         </form>
+        <h1>Attendances</h1>
         {% if attendances %}
             <ul>
             {% for attendance in attendances %}
-                <li><a href="{% url 'instructor detail' attendance.route_id %}">Class {{ attendance }}</a></li>
+                <li><a href="{% url 'instructor_detail' attendance.route_id %}">Attendance {{ attendance }} from {{ attendance.opening }} to {{ attendance.closing }}</a></li>
             {% endfor %}
             </ul>
         {% else %}
-            <p>No classes are available.</p>
+            <p>No attendances are available.</p>
         {% endif %}
     </body>
 </html>

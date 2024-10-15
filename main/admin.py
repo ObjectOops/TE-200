@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import AttendanceCode, AttendanceSession
+from .models import Attendance
 
-admin.site.register(AttendanceCode)
-admin.site.register(AttendanceSession)
+admin.site.register(Attendance)

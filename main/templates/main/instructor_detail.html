@@ -9,22 +9,18 @@
         <script src='main.js'></script> -->
     </head>
     <body>
-        {% if sessions %}
+        <h1>Attendance {{ attendance.route_id }}</h1>
+        <p>From {{ attendance.opening }} to {{ attendance.closing }}.</p>
+        <p>Code: {{ attendance.code }}</p>
+        <p>Count: {{ attendance.count }}</p>
+        {% if attendance %}
             <ul>
-                <li>{{ sessions|first }}</li>
-            </ul>
-        {% else %}
-            <p>No sessions are available.</p>
-        {% endif %}
-        <h1>Past Sessions</h1>
-        {% if sessions %}
-            <ul>
-            {% for session in sessions %}
-                <li>{{ session }}</li>
+            {% for attendee in attendance.attendees %}
+                <li>{{ attendee }}</li>
             {% endfor %}
             </ul>
         {% else %}
-            <p>No sessions are available.</p>
+            <p>No attendees are present.</p>
         {% endif %}
     </body>
 </html>
