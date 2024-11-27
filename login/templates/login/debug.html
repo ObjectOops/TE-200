@@ -3,23 +3,22 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <title>Student Login | Class Chime</title>
+        <title>Debug Interface | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
         <!-- <script src='main.js'></script> -->
     </head>
     <body>
-        <p>Student Login</p>
-        {% if login_failed %}
-            {% include 'login/banner.html' with msg=banner_msg %} 
-        {% endif %}
-        <form action="{% url 'student_auth' %}" method="POST">
+        <p>Debug Interface</p>
+        <form action="{% url 'create_user' %}" method="POST">
             {% csrf_token %}
             <label for="username-field">Username: </label>
             <input type="text" id="username-field" name="username">
             <label for="password-field">Password: </label>
             <input type="text" id="password-field" name="password">
+            <label for="i-field">Is Insructor: </label>
+            <input type="text" id="i-field" name="is-instructor">
             <button type="submit">Submit</button>
-        </form>        
+        </form>
     </body>
 </html>

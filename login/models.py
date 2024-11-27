@@ -2,7 +2,7 @@ from hashlib import sha256
 
 from django.db import models
 
-from util import stringify_attrs
+from util import sha256_hash, stringify_attrs
 
 class User(models.Model):
     username = models.CharField(max_length=64)
@@ -15,5 +15,5 @@ class User(models.Model):
         )
     
     def authenticate(self, password):
-        hash_unauthenticated = sha256(password.encode("utf-8")).hexdigest()
+        hash_unauthenticated = sha256_hash(password)
         return hash_unauthenticated == self.hash_sha256

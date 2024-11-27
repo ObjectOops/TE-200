@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from login.models import User
+from util import sha256_hash
 
 def index(request):
     return render(request, "login/index.html", {})
@@ -15,9 +16,8 @@ def instructor_auth(request):
     if user is not None and user.is_instructor:
         return HttpResponseRedirect(reverse("index", current_app="instructor"))
     context = {
-        "banner": render(request, "login/banner.html", {
-            "msg": "Invalid login."
-        })
+        "login_failed": True, 
+        "banner_msg": "Invalid login."
     }
     return render(request, "login/instructor.html", context)
 
@@ -29,9 +29,8 @@ def student_auth(request):
     if user is not None:
         return HttpResponseRedirect(reverse("index", current_app="student"))
     context = {
-        "banner": render(request, "login/banner.html", {
-            "msg": "Invalid login."
-        })
+        "login_failed": True, 
+        "banner_msg": "Invalid login."
     }
     return render(request, "login/student.html", context)
 
@@ -47,3 +46,19 @@ def auth_challenge(request):
     if not authenticated:
         return None
     return user
+
+def debug_interface(request):
+    return render(request, "login/debug.html", {})
+
+def create_user(request):
+    form = request.POST
+    username = form.get("username")
+    password = form.get("password")
+    is_instructor = form.get("is-instructor") == "true"
+    new_user = User(
+        username=username, 
+        hash_sha256=sha256_hash(password), 
+        is_instructor=is_instructor
+    )
+    new_user.save()
+    return render(request, "login/debug.html", {})

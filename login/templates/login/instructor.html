@@ -10,7 +10,9 @@
     </head>
     <body>
         <p>Instructor Login</p>
-        {{ banner }}
+        {% if login_failed %}
+            {% include 'login/banner.html' with msg=banner_msg %} 
+        {% endif %}
         <form action="{% url 'instructor_auth' %}" method="POST">
             {% csrf_token %}
             <label for="username-field">Username: </label>
