@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from login.models import User
-from util import sha256_hash
+from util import SessionState, sha256_hash
 
 def index(request):
     return render(request, "login/index.html", {})
@@ -14,7 +14,8 @@ def instructor_login(request):
 def instructor_auth(request):
     user = auth_challenge(request)
     if user is not None and user.is_instructor:
-        return HttpResponseRedirect(reverse("index", current_app="instructor"))
+        request.session["state"] = SessionState(signed_in=True, is_instructor=True).to_dict()
+        return HttpResponseRedirect(reverse("instructor_dashboard", current_app="dashboard"))
     context = {
         "login_failed": True, 
         "banner_msg": "Invalid login."
@@ -27,7 +28,8 @@ def student_login(request):
 def student_auth(request):
     user = auth_challenge(request)
     if user is not None:
-        return HttpResponseRedirect(reverse("index", current_app="student"))
+        request.session["state"] = SessionState(signed_in=True, is_instructor=False).to_dict()
+        return HttpResponseRedirect(reverse("student_dashboard", current_app="dashboard"))
     context = {
         "login_failed": True, 
         "banner_msg": "Invalid login."
