@@ -48,7 +48,6 @@ def create_class(request):
         signin_required=bool(signin_required), 
         owner=get_user(request)
     )
-    new_class.generate_route_id()
     new_class.save()
     return HttpResponseRedirect(reverse("instructor_class", args=[new_class.route_id]))
 

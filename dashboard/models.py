@@ -4,12 +4,12 @@ from django.db.models import F
 from django.utils import timezone
 
 from login.models import User
-from util import sha256_hash, stringify_attrs
+from util import generate_route_id, sha256_hash, stringify_attrs
 
 class ClassSession(models.Model):
     name = models.CharField(max_length=64)
     signin_required = models.BooleanField(default=False)
-    route_id = models.CharField(max_length=6)
+    route_id = models.CharField(max_length=6, default=generate_route_id)
     in_session = models.BooleanField(default=True)
     students = models.JSONField(default=list)
     student_count = models.IntegerField(default=0)
@@ -25,7 +25,3 @@ class ClassSession(models.Model):
     def mark_student(self, username):
         self.student_count = F("student_count") + 1
         self.students.append(f"{username} @ {timezone.now()}")
-    
-    def generate_route_id(self):
-        seed = hex(randint(0x0, 0xFFFFFF))[2:]
-        self.route_id = sha256_hash(seed)[0:6]

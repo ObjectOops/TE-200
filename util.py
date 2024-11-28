@@ -1,4 +1,5 @@
 from hashlib import sha256
+from random import randint
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -37,3 +38,7 @@ def check_session(request, instructor_only=True):
     if instructor_only:
         return True, "student_dashboard"
     return False, None
+
+def generate_route_id(self):
+    seed = hex(randint(0x0, 0xFFFFFF))[2:]
+    self.route_id = sha256_hash(seed)[0:6]
