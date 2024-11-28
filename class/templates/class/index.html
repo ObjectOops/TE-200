@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Join Class | Class Chime</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <!-- <script src='main.js'></script> -->
+    </head>
+    <body>
+        <p>Join Class:</p>
+        <p id="banner">{{ banner_msg }}</p>
+        <label for="username-field">Guest Username: </label>
+        <input type="text" id="username-field">
+        <label for="route-id-field">Class ID: </label>
+        <input type="text" id="route-id-field">
+        <button id="join-button">Join</button>
+    </body>
+    <script>
+        const banner = document.getElementById("banner");
+        const guestUsernameElem = document.getElementById("username-field");
+        const classIDElem = document.getElementById("route-id-field");
+        const joinButton = document.getElementById("join-button");
+        joinButton.addEventListener("click", async () => {
+            let guestUsername = encodeURIComponent(
+                guestUsernameElem.value.length === 0 
+                    ? "Anonymous" : guestUsernameElem.value
+            );
+            let classID = encodeURIComponent(classIDElem.value);
+            try {
+                let res = await fetch(`${window.location.href}join/?username=${guestUsername}&classID=${classID}`);
+                // console.log(res);
+                // console.log(await res.text())
+                if (!res.ok) {
+                    banner.innerText = "Unable to join class."
+                    return;
+                }
+                let data = await res.json();
+                if (data.redir) {
+                    window.location.replace(`${window.location.href}${classID}/student`);
+                } else {
+                    banner.innerText = data.bannerMsg;
+                }
+            } catch (err) {
+                console.log(err);
+                banner.innerText = "An unknown error occurred.";
+            }
+        });
+    </script>
+</html>

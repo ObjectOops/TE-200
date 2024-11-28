@@ -9,5 +9,5 @@ urlpatterns = [
     path("student/", views.student_login, name="student_login"),
     path("student/auth/", views.student_auth, name="student_auth"), # POST
     path("debug/", views.debug_interface, name="debug_interface"),
-    path("debug/create_user", views.create_user, name="create_user")
+    path("debug/create_user/", views.create_user, name="create_user")
 ]
