@@ -1,8 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from dashboard.models import ClassSession
-from util import SessionState
+from util import SessionState, check_session
 
 def index(request):
     return render(request, "class/index.html", {"banner_msg": ""})
@@ -42,6 +43,9 @@ def guest_join(request):
     return HttpResponse(single_jsonify("redir", "true"))
 
 def instructor_class(request, route_id):
+    redir, redir_name = check_session(request, instructor_only=True)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     class_session = ClassSession.objects.filter(route_id=route_id).first()
     if class_session is None:
         return HttpResponse(status=404)
@@ -60,4 +64,7 @@ def instructor_class(request, route_id):
     })
 
 def student_class(request, route_id):
+    redir, redir_name = check_session(request, instructor_only=False)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     return HttpResponse("SC")
