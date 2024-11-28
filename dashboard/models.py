@@ -3,7 +3,7 @@ from django.db.models import F
 
 from util import stringify_attrs
 
-class Class(models.Model):
+class ClassSession(models.Model):
     name = models.CharField(max_length=64)
     signin_required = models.BooleanField(default=False)
     route_id = models.CharField(max_length=6)

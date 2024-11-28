@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from dashboard.models import Class
+from dashboard.models import ClassSession
 from login.models import User
 from util import SessionState, check_session
 
@@ -37,13 +37,13 @@ def create_class(request):
         return render(request, "dashboard/instructor.html", {
             "banner_msg": "Invalid parameters."
         })
-    new_class = Class(name=class_name, signin_required=bool(signin_required))
+    new_class = ClassSession(name=class_name, signin_required=bool(signin_required))
     new_class.save()
     return HttpResponseRedirect(reverse("instructor_class", args=[new_class.route_id]))
 
 def join_class(request):
     class_route_id = request.POST.get("route-id")
-    class_session = Class.objects.filter(route_id=class_route_id).first()
+    class_session = ClassSession.objects.filter(route_id=class_route_id).first()
     if class_session is None:
         return render(request, "dashboard/student.html", {
             "banner_msg": "Invalid class ID."
