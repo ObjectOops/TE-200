@@ -17,3 +17,6 @@ class User(models.Model):
     def authenticate(self, password):
         hash_unauthenticated = sha256_hash(password)
         return hash_unauthenticated == self.hash_sha256
+
+def get_user(request):
+    return User.objects.get(username=request.session["username"])

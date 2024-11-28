@@ -14,7 +14,9 @@ def instructor_login(request):
 def instructor_auth(request):
     user = auth_challenge(request)
     if user is not None and user.is_instructor:
-        request.session["state"] = SessionState(signed_in=True, is_instructor=True).to_dict()
+        session = request.session
+        session["state"] = SessionState(signed_in=True, is_instructor=True).to_dict()
+        session["username"] = user.username
         return HttpResponseRedirect(reverse("instructor_dashboard", current_app="dashboard"))
     return render(request, "login/instructor.html", {"banner_msg": "Invalid login."})
 

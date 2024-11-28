@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from dashboard.models import ClassSession
-from login.models import User
+from login.models import User, get_user
 from util import SessionState, check_session
 
 def index(request):
@@ -21,7 +21,10 @@ def instructor_dashboard(request):
     redir, redir_name = check_session(request)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
-    return render(request, "dashboard/instructor.html")
+    user = get_user(request)
+    return render(request, "dashboard/instructor.html", {
+        "classes": user.classsession_set.order_by("-creation")
+    })
 
 def student_dashboard(request):
     redir, redir_name = check_session(request, instructor_only=False)
@@ -37,7 +40,12 @@ def create_class(request):
         return render(request, "dashboard/instructor.html", {
             "banner_msg": "Invalid parameters."
         })
-    new_class = ClassSession(name=class_name, signin_required=bool(signin_required))
+    new_class = ClassSession(
+        name=class_name, 
+        signin_required=bool(signin_required), 
+        owner=get_user(request)
+    )
+    new_class.generate_route_id()
     new_class.save()
     return HttpResponseRedirect(reverse("instructor_class", args=[new_class.route_id]))
 
