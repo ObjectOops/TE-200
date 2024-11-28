@@ -8,6 +8,7 @@ from util import SessionState, check_session
 def index(request):
     return render(request, "class/index.html", {"banner_msg": ""})
 
+# Yes, this function is nearly identical to the one in the dashboard app.
 def guest_join(request):
     session = request.session
     single_jsonify = lambda key, val: f"{{\"{key}\": {val}}}"

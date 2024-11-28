@@ -24,7 +24,7 @@ class ClassSession(models.Model):
 
     def mark_student(self, username):
         self.student_count = F("student_count") + 1
-        self.students.append(username)
+        self.students.append(f"{username} @ {timezone.now()}")
     
     def generate_route_id(self):
         seed = hex(randint(0x0, 0xFFFFFF))[2:]
