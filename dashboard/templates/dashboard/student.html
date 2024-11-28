@@ -1,1 +1,24 @@
-STest
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Dashboard | Student | Class Chime</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <!-- <script src='main.js'></script> -->
+    </head>
+    <body>
+        <p>Student Dashboard</p>
+        {% if banner_msg %}
+            {% include 'dashboard/banner.html' with msg=banner_msg %} 
+        {% endif %}
+        <p>Join a class:</p>
+        <form action="{% url 'join_class' %}" method="POST">
+            {% csrf_token %}
+            <label for="route-id-field">Class ID: </label>
+            <input type="text" id="username-field" name="route-id">
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

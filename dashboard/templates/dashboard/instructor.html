@@ -1,1 +1,35 @@
-ITest
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Dashboard | Instructor | Class Chime</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <!-- <script src='main.js'></script> -->
+    </head>
+    <body>
+        <p>Instructor Dashboard</p>
+        {% if banner_msg %}
+            {% include 'dashboard/banner.html' with msg=banner_msg %} 
+        {% endif %}
+        <p>Create a class:</p>
+        <form action="{% url 'create_class' %}" method="POST">
+            {% csrf_token %}
+            <label for="name-field">Class Name: </label>
+            <input type="text" id="name-field" name="class-name">
+            <label for="signin-req-field">Sign-in Required: </label>
+            <input type="checkbox" id="signin-req-field" name="signin-required">
+            <button type="submit">Submit</button>
+        </form>
+        {% if classes %}
+            <ul>
+            {% for class in classes %}
+                <li><a href="{% url 'instructor_class' class.route_id %}">Attendance {{ attendance }} from {{ attendance.opening }} to {{ attendance.closing }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No classes to list.</p>
+        {% endif %}
+    </body>
+</html>

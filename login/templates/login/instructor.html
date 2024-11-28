@@ -10,7 +10,7 @@
     </head>
     <body>
         <p>Instructor Login</p>
-        {% if login_failed %}
+        {% if banner_msg %}
             {% include 'login/banner.html' with msg=banner_msg %} 
         {% endif %}
         <form action="{% url 'instructor_auth' %}" method="POST">
