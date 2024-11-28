@@ -18,10 +18,18 @@
         <button id="join-button">Join</button>
     </body>
     <script>
+        const base = window.location.origin + window.location.pathname;
         const banner = document.getElementById("banner");
         const guestUsernameElem = document.getElementById("username-field");
         const classIDElem = document.getElementById("route-id-field");
         const joinButton = document.getElementById("join-button");
+
+        const queryParams = new URLSearchParams(window.location.search);
+        const dciLabel = "defaultclassid";
+        if (queryParams.has(dciLabel)) {
+            classIDElem.value = queryParams.get(dciLabel);
+        }
+
         joinButton.addEventListener("click", async () => {
             let guestUsername = encodeURIComponent(
                 guestUsernameElem.value.length === 0 
@@ -29,7 +37,7 @@
             );
             let classID = encodeURIComponent(classIDElem.value);
             try {
-                let res = await fetch(`${window.location.href}join/?username=${guestUsername}&classID=${classID}`);
+                let res = await fetch(`${base}join/?username=${guestUsername}&classID=${classID}`);
                 // console.log(res);
                 // console.log(await res.text())
                 if (!res.ok) {
@@ -38,7 +46,7 @@
                 }
                 let data = await res.json();
                 if (data.redir) {
-                    window.location.replace(`${window.location.href}${classID}/student`);
+                    window.location.replace(`${base}${classID}/student`);
                 } else {
                     banner.innerText = data.bannerMsg;
                 }

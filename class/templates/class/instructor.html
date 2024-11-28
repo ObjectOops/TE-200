@@ -1,14 +1,53 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% load static %}
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <title>Class [{{ class.name }}] | Instructor | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
         <!-- <script src='main.js'></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qartjs/1.2.0/qart.min.js"></script>
     </head>
     <body>
-        
+        <p>Class [{{ class.name }}]</p>
+        <form action="{% url 'instructor_class' class.route_id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Refresh Attendance View</button>
+        </form>
+        {% if class.in_session %}
+            <form action="{% url 'instructor_class' class.route_id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" value="stop" name="class-door">STOP Class</button>
+            </form>
+        {% else %}
+            <form action="{% url 'instructor_class' class.route_id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" value="start" name="class-door">START Class</button>
+            </form>
+        {% endif %}
+        {% if students %}
+            <ul>
+            {% for student in students %}
+                <li>{{ student }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No students are present.</p>
+        {% endif %}
+        <p>Scan to join:</p>
+        <div id="qart"></div>
     </body>
+    <script>
+    const defaultClassID = "{{ class.route_id }}";
+    const qrValue = `${window.location.origin}/class/?defaultclassid=${defaultClassID}`;
+    console.log(qrValue);
+    new QArt({
+        value: qrValue,
+        imagePath: "{% static 'class_chime_favicon.png' %}",
+        filter: "threshold",
+        size: 300
+    }).make(document.getElementById('qart'));
+    </script>
 </html>

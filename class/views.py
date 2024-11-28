@@ -42,7 +42,22 @@ def guest_join(request):
     return HttpResponse(single_jsonify("redir", "true"))
 
 def instructor_class(request, route_id):
-    return HttpResponse("IC")
+    class_session = ClassSession.objects.filter(route_id=route_id).first()
+    if class_session is None:
+        return HttpResponse(status=404)
+    form = request.POST
+    class_door_label = "class-door" # It's a metaphor for whether or not the literal door is open.
+    if class_door_label in form:
+        class_door = form.get(class_door_label)
+        if class_door == "start":
+            class_session.in_session = True
+        elif class_door == "stop":
+            class_session.in_session = False
+        class_session.save()
+    return render(request, "class/instructor.html", {
+        "class": class_session, 
+        "students": class_session.students
+    })
 
 def student_class(request, route_id):
     return HttpResponse("SC")
