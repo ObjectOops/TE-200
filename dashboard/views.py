@@ -18,7 +18,7 @@ def index(request):
     return HttpResponseRedirect(reverse("student_dashboard"))
 
 def instructor_dashboard(request):
-    redir, redir_name = check_session(request)
+    redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
     user = get_user(request)
@@ -33,6 +33,9 @@ def student_dashboard(request):
     return render(request, "dashboard/student.html")
 
 def create_class(request):
+    redir, redir_name = check_session(request, instructor_only=True)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     form = request.POST
     class_name = form.get("class-name")
     signin_required = form.get("signin-required")
@@ -50,6 +53,9 @@ def create_class(request):
     return HttpResponseRedirect(reverse("instructor_class", args=[new_class.route_id]))
 
 def join_class(request):
+    redir, redir_name = check_session(request, instructor_only=False)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     class_route_id = request.POST.get("route-id")
     class_session = ClassSession.objects.filter(route_id=class_route_id).first()
     if class_session is None:
