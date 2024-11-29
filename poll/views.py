@@ -58,13 +58,14 @@ def answer_poll(request, class_route_id):
     active_poll = form.get("active-poll")
     poll = Poll.objects.filter(route_id=active_poll).first()
     back = HttpResponseRedirect(reverse("student_class", args=[class_route_id]))
+    poll_msg_label = "poll_msg"
     if poll is None:
-        session["poll_msg"] = "Invalid poll ID." # Not a great way to send data.
+        session[poll_msg_label] = "Invalid poll ID." # Not a great way to send data.
         return back
     if not poll.is_open:
-        session["poll_msg"] = "Poll expired."
+        session[poll_msg_label] = "Poll expired."
         return back
     poll.add_answer(request.session["username"], answer)
     poll.save()
-    session["poll_msg"] = "Submitted answer to poll." # Not a great way to send data.
+    session[poll_msg_label] = "Submitted answer to poll." # Not a great way to send data.
     return back
