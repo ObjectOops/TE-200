@@ -12,8 +12,9 @@
     </head>
     <body>
         <p>Class [{{ class.name }}]</p>
+        <p>Class ID: {{ class.route_id }}</p>
         <a href="/dashboard/instructor/">Back</a>
-        <a href="/broadcast/{{ class.route_id }}/instructor/">WebRTC Broadcast Video + Screen</a>
+        <a target="_blank" rel="noopener noreferrer" href="/broadcast/{{ class.route_id }}/instructor/">WebRTC Broadcast Video + Screen</a>
         <form action="{% url 'instructor_class' class.route_id %}" method="POST">
             {% csrf_token %}
             <button type="submit">Refresh Attendance View</button>

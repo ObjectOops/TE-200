@@ -15,7 +15,7 @@
     </head>
     <body>
         <p>Class [{{ class.name }}]</p>
-        <a href="/broadcast/{{ class.route_id }}/student/">View WebRTC Broadcast Video + Screen</a>
+        <a target="_blank" rel="noopener noreferrer" href="/broadcast/{{ class.route_id }}/student/">View WebRTC Broadcast Video + Screen</a>
         {% if banner_msg %}
             {% include 'class/banner.html' with msg=banner_msg %} 
         {% endif %}

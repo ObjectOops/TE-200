@@ -21,6 +21,7 @@
         connection.session = {
             video: true, 
             screen: true, 
+            audio: true, 
             oneway: true
         };
 
@@ -29,9 +30,12 @@
         //     OfferToReceiveVideo: true
         // };
 
-        // connection.onstream = function(event) {
-        //     document.body.appendChild(event.mediaElement);
-        // };
+        connection.onstream = (event) => {
+            if (event.mediaElement) {
+                event.mediaElement.muted = true;
+            }
+            document.body.appendChild(event.mediaElement);
+        }
 
         connection.open("{{ class.route_id }}");
     </script>
