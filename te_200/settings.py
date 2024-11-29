@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "dashboard.apps.DashboardConfig",
     "class.apps.ClassConfig",
-    "poll.apps.PollConfig"
+    "poll.apps.PollConfig",
+    "broadcast.apps.BroadcastConfig"
 ]
 
 MIDDLEWARE = [

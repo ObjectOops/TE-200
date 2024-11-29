@@ -23,5 +23,6 @@ urlpatterns = [
     path("login/", include("login.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("class/", include("class.urls")),
-    path("poll/", include("poll.urls"))
+    path("poll/", include("poll.urls")),
+    path("broadcast/", include("broadcast.urls"))
 ]

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Broadcast [{{ class.name }}] | Instructor | Class Chime</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <!-- <script src='main.js'></script> -->
+        <script src="https://muazkhan.com:9001/dist/RTCMultiConnection.min.js"></script>
+        <script src="https://muazkhan.com:9001/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <p>Broadcast [{{ class.name }}]</p>
+    </body>
+    <script>
+        var connection = new RTCMultiConnection();
+
+        connection.socketURL = "{{ signaling_server_url }}";
+
+        connection.session = {
+            video: true, 
+            screen: true, 
+            oneway: true
+        };
+
+        // connection.sdpConstraints.mandatory = {
+        //     OfferToReceiveAudio: false,
+        //     OfferToReceiveVideo: true
+        // };
+
+        // connection.onstream = function(event) {
+        //     document.body.appendChild(event.mediaElement);
+        // };
+
+        connection.open("{{ class.route_id }}");
+    </script>
+</html>
