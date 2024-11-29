@@ -51,8 +51,6 @@ def poll_detail(request, class_route_id, poll_route_id):
 
 def answer_poll(request, class_route_id):
     session = request.session
-    if "username" not in session:
-        return HttpResponse(status=403)
     form = request.POST
     if "username" not in session or "answer" not in form or "active-poll" not in form:
         return HttpResponse(status=403)
