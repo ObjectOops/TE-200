@@ -39,6 +39,7 @@ def check_session(request, instructor_only=True):
         return True, "student_dashboard"
     return False, None
 
-def generate_route_id(self):
+def generate_route_id():
     seed = hex(randint(0x0, 0xFFFFFF))[2:]
-    self.route_id = sha256_hash(seed)[0:6]
+    route_id = sha256_hash(seed)[0:6]
+    return route_id

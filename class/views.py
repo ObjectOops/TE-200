@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from dashboard.models import ClassSession
+from poll.models import Poll
 from util import SessionState, check_session
 
 def index(request):
@@ -61,11 +62,22 @@ def instructor_class(request, route_id):
         class_session.save()
     return render(request, "class/instructor.html", {
         "class": class_session, 
-        "students": class_session.students
+        "students": class_session.students, 
+        "polls": class_session.poll_set.order_by("-creation")
     })
 
 def student_class(request, route_id):
-    redir, redir_name = check_session(request, instructor_only=False)
-    if redir:
-        return HttpResponseRedirect(reverse(redir_name))
-    return HttpResponse("SC")
+    session = request.session
+    if "username" not in session:
+        return HttpResponse(status=403)
+    class_session = ClassSession.objects.filter(route_id=route_id).first()
+    if class_session is None:
+        return HttpResponse(status=404)
+    banner_msg = ""
+    if "poll_msg" in session: # Not a great way to get data.
+        banner_msg = session["poll_msg"]
+    return render(request, "class/student.html", {
+        "class": class_session, 
+        "banner_msg": banner_msg, 
+        "polls": class_session.poll_set.order_by("-creation")
+    })

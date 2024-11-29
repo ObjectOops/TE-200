@@ -3,12 +3,42 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <title>Class [{{ class.name }}] | Instructor | Class Chime</title>
+        <title>Class [{{ class.name }}] | Student | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
         <!-- <script src='main.js'></script> -->
+        <script>
+            function setActivePoll(name, routeID) {
+                document.getElementById("active-field").value = routeID;
+            }
+        </script>
     </head>
     <body>
-        
+        <p>Class [{{ class.name }}]</p>
+        {% if banner_msg %}
+            {% include 'class/banner.html' with msg=banner_msg %} 
+        {% endif %}
+        <form action="{% url 'student_class' class.route_id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Refresh Polls View</button>
+        </form>
+        <form action="{% url 'answer_poll' class.route_id %}" method="POST">
+            {% csrf_token %}
+            <label for="answer-field">Answer: </label>
+            <input type="text" id="answer-field" name="answer">
+            <label for="active-field">Active Poll: </label>
+            <input type="text" id="active-field" name="active-poll" value="No active poll.">            
+            <button type="submit">Submit</button>
+        </form>
+        <p>Polls (click to activate):</p>
+        {% if polls %}
+            <ul>
+            {% for poll in polls %}
+                <li><button onclick="setActivePoll('{{ poll.name }}', '{{ poll.route_id }}')">{{ poll.name }}</button></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No polls are open.</p>
+        {% endif %}
     </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Poll [{{ poll.name }}] | Class Chime</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <!-- <script src='main.js'></script> -->
+    </head>
+    <body>
+        <a href="/class/{{ class_route_id }}/instructor">Back</a>
+        <p>Poll [{{ poll.name }}]</p>
+        <form action="{% url 'poll_detail' class_route_id poll_route_id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Refresh Answer View</button>
+        </form>
+        {% if poll.is_open %}
+            <form action="{% url 'poll_detail' class_route_id poll_route_id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" value="close" name="poll-window">Close Poll</button>
+            </form>
+        {% else %}
+            <form action="{% url 'poll_detail' class_route_id poll_route_id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" value="open" name="poll-window">Open Poll</button>
+            </form>
+        {% endif %}
+        {% if answers %}
+            <ul>
+            {% for answer in answers %}
+                <li>{{ answer }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No answers have been submitted.</p>
+        {% endif %}
+    </body>
+</html>

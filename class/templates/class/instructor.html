@@ -12,6 +12,7 @@
     </head>
     <body>
         <p>Class [{{ class.name }}]</p>
+        <a href="/dashboard/instructor">Back</a>
         <form action="{% url 'instructor_class' class.route_id %}" method="POST">
             {% csrf_token %}
             <button type="submit">Refresh Attendance View</button>
@@ -38,16 +39,34 @@
         {% endif %}
         <p>Scan to join:</p>
         <div id="qart"></div>
+
+        <p>Create Poll:</p>
+        <form action="{% url 'create_poll' class.route_id %}" method="POST">
+            {% csrf_token %}
+            <label for="poll-name-field">Poll Name: </label>
+            <input type="text" id="poll-name-field" name="poll-name">
+            <button type="submit">Submit</button>
+        </form>
+        <p>Polls:</p>
+        {% if polls %}
+            <ul>
+            {% for poll in polls %}
+                <li><a href="{% url 'poll_detail' class.route_id poll.route_id %}">{{ poll.name }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No polls are open.</p>
+        {% endif %}
     </body>
     <script>
-    const defaultClassID = "{{ class.route_id }}";
-    const qrValue = `${window.location.origin}/class/?defaultclassid=${defaultClassID}`;
-    console.log(qrValue);
-    new QArt({
-        value: qrValue,
-        imagePath: "{% static 'class_chime_favicon.png' %}",
-        filter: "threshold",
-        size: 300
-    }).make(document.getElementById('qart'));
+        const defaultClassID = "{{ class.route_id }}";
+        const qrValue = `${window.location.origin}/class/?defaultclassid=${defaultClassID}`;
+        console.log(qrValue);
+        new QArt({
+            value: qrValue,
+            imagePath: "{% static 'class_chime_favicon.png' %}",
+            filter: "threshold",
+            size: 300
+        }).make(document.getElementById('qart'));
     </script>
 </html>
