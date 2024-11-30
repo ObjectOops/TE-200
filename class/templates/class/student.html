@@ -21,10 +21,7 @@
         {% if banner_msg %}
             {% include 'class/banner.html' with msg=banner_msg %} 
         {% endif %}
-        <form action="{% url 'student_class' class.route_id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">Refresh Polls View</button>
-        </form>
+        <br><button onclick="window.location.replace(window.location.href)">Refresh Polls View</button>
         <form action="{% url 'answer_poll' class.route_id %}" method="POST">
             {% csrf_token %}
             <label for="answer-field">Answer: </label>

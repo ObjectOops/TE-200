@@ -4,9 +4,10 @@ from django.urls import reverse
 
 from dashboard.models import ClassSession
 from login.models import User, get_user
-from util import SessionState, check_session
+from util import SessionState, check_session, log_request
 
 def index(request):
+    log_request(request)
     session_state = SessionState(from_dict=request.session.get(
         "state", 
         SessionState().to_dict()
@@ -18,6 +19,7 @@ def index(request):
     return HttpResponseRedirect(reverse("student_dashboard"))
 
 def instructor_dashboard(request):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
@@ -27,12 +29,14 @@ def instructor_dashboard(request):
     })
 
 def student_dashboard(request):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=False)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
     return render(request, "dashboard/student.html")
 
 def create_class(request):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
@@ -52,6 +56,7 @@ def create_class(request):
     return HttpResponseRedirect(reverse("instructor_class", args=[new_class.route_id]))
 
 def join_class(request):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=False)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))

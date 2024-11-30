@@ -17,10 +17,7 @@
         <a href="/dashboard/instructor/">Back</a>
         <br>
         <a target="_blank" rel="noopener noreferrer" href="/broadcast/{{ class.route_id }}/instructor/">WebRTC Broadcast Video + Screen</a>
-        <form action="{% url 'instructor_class' class.route_id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">Refresh Attendance View</button>
-        </form>
+        <br><button onclick="window.location.replace(window.location.href)">Refresh Attendance View</button>
         {% if class.in_session %}
             <form action="{% url 'instructor_class' class.route_id %}" method="POST">
                 {% csrf_token %}

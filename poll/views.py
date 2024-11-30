@@ -4,9 +4,10 @@ from django.urls import reverse
 
 from dashboard.models import ClassSession
 from poll.models import Poll
-from util import check_session
+from util import check_session, log_request
 
 def create_poll(request, class_route_id):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
@@ -24,6 +25,7 @@ def create_poll(request, class_route_id):
     )
 
 def poll_detail(request, class_route_id, poll_route_id):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
@@ -50,10 +52,14 @@ def poll_detail(request, class_route_id, poll_route_id):
     })
 
 def answer_poll(request, class_route_id):
+    log_request(request)
+    redir, redir_name = check_session(request, instructor_only=False, allow_guest=True)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     session = request.session
     form = request.POST
-    if "username" not in session or "answer" not in form or "active-poll" not in form:
-        return HttpResponse(status=403)
+    if "answer" not in form or "active-poll" not in form:
+        return HttpResponse(status=400)
     answer = form.get("answer")
     active_poll = form.get("active-poll")
     poll = Poll.objects.filter(route_id=active_poll).first()

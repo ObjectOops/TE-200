@@ -4,13 +4,15 @@ from django.urls import reverse
 
 from dashboard.models import ClassSession
 from poll.models import Poll
-from util import SessionState, check_session
+from util import SessionState, check_session, log_request
 
 def index(request):
+    log_request(request)
     return render(request, "class/index.html", {"banner_msg": ""})
 
 # Yes, this function is nearly identical to the one in the dashboard app.
 def guest_join(request):
+    log_request(request)
     session = request.session
     single_jsonify = lambda key, val: f"{{\"{key}\": {val}}}"
 
@@ -45,6 +47,7 @@ def guest_join(request):
     return HttpResponse(single_jsonify("redir", "true"))
 
 def instructor_class(request, route_id):
+    log_request(request)
     redir, redir_name = check_session(request, instructor_only=True)
     if redir:
         return HttpResponseRedirect(reverse(redir_name))
@@ -67,9 +70,10 @@ def instructor_class(request, route_id):
     })
 
 def student_class(request, route_id):
-    session = request.session
-    if "username" not in session:
-        return HttpResponse(status=403)
+    log_request(request)
+    redir, redir_name = check_session(request, instructor_only=False, allow_guest=True)
+    if redir:
+        return HttpResponseRedirect(reverse(redir_name))
     class_session = ClassSession.objects.filter(route_id=route_id).first()
     if class_session is None:
         return HttpResponse(status=404)

@@ -3,15 +3,18 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from login.models import User
-from util import SessionState, sha256_hash
+from util import SessionState, log_request, sha256_hash
 
 def index(request):
+    log_request(request)
     return render(request, "login/index.html", {})
 
 def instructor_login(request):
+    log_request(request)
     return render(request, "login/instructor.html", {})
 
 def instructor_auth(request):
+    log_request(request)
     user = auth_challenge(request)
     if user is not None and user.is_instructor:
         session = request.session
@@ -21,9 +24,11 @@ def instructor_auth(request):
     return render(request, "login/instructor.html", {"banner_msg": "Invalid login."})
 
 def student_login(request):
+    log_request(request)
     return render(request, "login/student.html")
 
 def student_auth(request):
+    log_request(request)
     user = auth_challenge(request)
     if user is not None:
         session = request.session
@@ -45,9 +50,11 @@ def auth_challenge(request):
     return user
 
 def debug_interface(request):
+    log_request(request)
     return render(request, "login/debug.html", {})
 
 def create_user(request):
+    log_request(request)
     form = request.POST
     username = form.get("username")
     password = form.get("password")

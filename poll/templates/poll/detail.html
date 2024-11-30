@@ -13,10 +13,7 @@
     <body>
         <h1>Poll [{{ poll.name }}]</h1>
         <a href="/class/{{ class_route_id }}/instructor">Back</a>
-        <form action="{% url 'poll_detail' class_route_id poll_route_id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">Refresh Answer View</button>
-        </form>
+        <br><button onclick="window.location.replace(window.location.href)">Refresh Answer View</button>
         {% if poll.is_open %}
             <form action="{% url 'poll_detail' class_route_id poll_route_id %}" method="POST">
                 {% csrf_token %}
