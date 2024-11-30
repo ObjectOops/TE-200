@@ -73,9 +73,8 @@ def student_class(request, route_id):
     class_session = ClassSession.objects.filter(route_id=route_id).first()
     if class_session is None:
         return HttpResponse(status=404)
-    banner_msg = ""
-    if "poll_msg" in session: # Not a great way to get data.
-        banner_msg = session["poll_msg"]
+    # Not a great way to get data.
+    banner_msg = request.session.get("poll_msg", "")
     return render(request, "class/student.html", {
         "class": class_session, 
         "banner_msg": banner_msg, 
