@@ -51,11 +51,12 @@ def create_user(request):
     form = request.POST
     username = form.get("username")
     password = form.get("password")
-    is_instructor = form.get("is-instructor") == "true"
+    # is_instructor = form.get("is-instructor") == "true"
     new_user = User(
         username=username, 
         hash_sha256=sha256_hash(password), 
-        is_instructor=is_instructor
+        # is_instructor=is_instructor
+        is_instructor=False
     )
     new_user.save()
     return render(request, "login/debug.html", {})
