@@ -10,7 +10,7 @@ This repo contains an implementation with the following features:
 - QR Code Generation
 - P2P Webcam + Screen + Microphone Streaming
 
-> Warning:  
+> [!Warning]
 > No part of this codebase is intended for a production environment. This project was developed **in haste** solely for the purpose of having an MVP prototype.
 
 ![Screenshot](./static/class_chime_screenshot.png)
@@ -37,5 +37,5 @@ LOGGING="ON"
 # Visit port 8000.
 # Port 9001 is for the signaling server.
 ```
-> Note:  
+> [!Note]
 > The signaling server accepts requests from **all origins**. Be sure that the signaling server is accessible via browser requests. This means making forwarded ports public if applicable.
