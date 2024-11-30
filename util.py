@@ -8,7 +8,7 @@ from django.urls import reverse
 from dotenv import load_dotenv
 
 load_dotenv()
-logging = os.environ.get("LOGGING", "OFF")
+logging = os.environ.get("LOGGING", "OFF") == "ON"
 
 def stringify_attrs(*kargs):
     items = [str(item) for item in kargs]
