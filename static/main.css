@@ -1,0 +1,33 @@
+body {
+    background-color: #fff2ccff;
+    font-family: Helvetica, Arial, sans-serif;
+    text-align: center;
+}
+
+input {
+    border-color: #a35600ff;
+    border-width: 4px;
+}
+
+button {
+    background-color: blanchedalmond;
+    border-color: #ffd966ff;
+    border-width: 4px;
+}
+
+ul {
+    border: 1px solid crimson;
+    text-align: left;
+}
+
+a {
+    color: sienna;
+}
+
+.login-banner, .dashboard-banner {
+    color: tomato;
+}
+
+.class-banner {
+    color: cornflowerblue;
+}

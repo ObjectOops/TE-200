@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% load static %}
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <title>Login | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <link rel='stylesheet' type='text/css' media='screen' href="{% static 'main.css' %}">
+        <link rel='icon' type='image/png' href="{% static 'class_chime_favicon.png' %}">
         <!-- <script src='main.js'></script> -->
     </head>
     <body>
         <p>Are you a student or an instructor?</p>
+        <br>
         <div>
             <a href="./student/">Student</a> | 
             <a href="./instructor/">Instructor</a>

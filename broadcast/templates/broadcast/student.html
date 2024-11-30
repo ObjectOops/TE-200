@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% load static %}
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <title>Broadcast [{{ class.name }}] | Student | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <link rel='stylesheet' type='text/css' media='screen' href="{% static 'main.css' %}">
+        <link rel='icon' type='image/png' href="{% static 'class_chime_favicon.png' %}">
         <!-- <script src='main.js'></script> -->
         <script src="https://muazkhan.com:9001/dist/RTCMultiConnection.min.js"></script>
         <script src="https://muazkhan.com:9001/socket.io/socket.io.js"></script>

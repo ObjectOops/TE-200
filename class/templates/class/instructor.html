@@ -6,14 +6,16 @@
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <title>Class [{{ class.name }}] | Instructor | Class Chime</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <link rel='stylesheet' type='text/css' media='screen' href="{% static 'main.css' %}">
+        <link rel='icon' type='image/png' href="{% static 'class_chime_favicon.png' %}">
         <!-- <script src='main.js'></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qartjs/1.2.0/qart.min.js"></script>
     </head>
     <body>
-        <p>Class [{{ class.name }}]</p>
-        <p>Class ID: {{ class.route_id }}</p>
+        <h1>Class [{{ class.name }}]</h1>
+        <p><b>Class ID: {{ class.route_id }}</b></p>
         <a href="/dashboard/instructor/">Back</a>
+        <br>
         <a target="_blank" rel="noopener noreferrer" href="/broadcast/{{ class.route_id }}/instructor/">WebRTC Broadcast Video + Screen</a>
         <form action="{% url 'instructor_class' class.route_id %}" method="POST">
             {% csrf_token %}
